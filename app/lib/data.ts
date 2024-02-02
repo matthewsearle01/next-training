@@ -3,7 +3,7 @@ import {
   CustomerField,
   CustomersTableType,
   CaseStudyForm,
-  CaseStudiesTable,
+  CaseStudyTable,
   LatestCaseStudyRaw,
   User,
   Revenue,
