@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const externalServiceUrl = process.env.EXTERNAL_SERVICE_URL;
 
-  const response = await fetch(`${externalServiceUrl}/doc_store/list`);
+  const response = await fetch(`https://swapi.dev/api/planets/1/`);
 
   if (!response.ok) {
     res.status(500).json({ error: 'Failed to fetch document list' });
