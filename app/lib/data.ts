@@ -2,9 +2,9 @@ import { sql } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
+  CaseStudyForm,
+  CaseStudiesTable,
+  LatestCaseStudyRaw,
   User,
   Revenue,
 } from './definitions';
@@ -34,24 +34,24 @@ export async function fetchRevenue() {
   }
 }
 
-export async function fetchLatestInvoices() {
+export async function fetchLatestCaseStudies() {
   noStore()
   try {
-    const data = await sql<LatestInvoiceRaw>`
+    const data = await sql<LatestCaseStudyRaw>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
       LIMIT 5`;
 
-    const latestInvoices = data.rows.map((invoice) => ({
-      ...invoice,
-      amount: formatCurrency(invoice.amount),
+    const latestCaseStudies = data.rows.map((caseStudy) => ({
+      ...caseStudy,
+      amount: formatCurrency(caseStudy.amount),
     }));
-    return latestInvoices;
+    return latestCaseStudies;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest invoices.');
+    throw new Error('Failed to fetch the latest Case Studies.');
   }
 }
 
@@ -61,29 +61,29 @@ export async function fetchCardData() {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
-    const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
+    const caseStudyCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
-    const invoiceStatusPromise = sql`SELECT
+    const caseStudyStatusPromise = sql`SELECT
          SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
     const data = await Promise.all([
-      invoiceCountPromise,
+      caseStudyCountPromise,
       customerCountPromise,
-      invoiceStatusPromise,
+      caseStudyStatusPromise,
     ]);
 
-    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
+    const numberOfCaseStudies = Number(data[0].rows[0].count ?? '0');
     const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+    const totalPaidCaseStudies = formatCurrency(data[2].rows[0].paid ?? '0');
+    const totalPendingCaseStudies = formatCurrency(data[2].rows[0].pending ?? '0');
 
     return {
       numberOfCustomers,
-      numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
+      numberOfCaseStudies,
+      totalPaidCaseStudies,
+      totalPendingCaseStudies,
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -92,7 +92,7 @@ export async function fetchCardData() {
 }
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
+export async function fetchFilteredCaseStudies(
   query: string,
   currentPage: number,
 ) {
@@ -100,7 +100,7 @@ export async function fetchFilteredInvoices(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const invoices = await sql<InvoicesTable>`
+    const caseStudies = await sql<InvoicesTable>`
       SELECT
         invoices.id,
         invoices.amount,
@@ -121,14 +121,14 @@ export async function fetchFilteredInvoices(
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
-    return invoices.rows;
+    return caseStudies.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoices.');
+    throw new Error('Failed to fetch Case Studies.');
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+export async function fetchCaseStudyPages(query: string) {
   noStore()
   try {
     const count = await sql`SELECT COUNT(*)
@@ -146,11 +146,11 @@ export async function fetchInvoicesPages(query: string) {
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of invoices.');
+    throw new Error('Failed to fetch total number of Case Studies.');
   }
 }
 
-export async function fetchInvoiceById(id: string) {
+export async function fetchCaseStudyById(id: string) {
   noStore()
   try {
     const data = await sql<InvoiceForm>`
@@ -163,16 +163,16 @@ export async function fetchInvoiceById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.rows.map((invoice) => ({
-      ...invoice,
+    const caseStudy = data.rows.map((caseStudy) => ({
+      ...caseStudy,
       // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
+      amount: caseStudy.amount / 100,
     }));
 
-    return invoice[0];
+    return caseStudy[0];
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch invoice.');
+    throw new Error('Failed to fetch Case Study.');
   }
 }
 

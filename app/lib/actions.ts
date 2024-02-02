@@ -12,10 +12,10 @@ const FormSchema = z.object({
     status: z.enum(['pending', 'paid']),
     date: z.string(),});
    
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
+const CreateCaseStudy = FormSchema.omit({ id: true, date: true });
 
-export async function createInvoice(formData: FormData) {
-    const { customerId, amount, status } = CreateInvoice.parse({
+export async function createCaseStudy(formData: FormData) {
+    const { customerId, amount, status } = CreateCaseStudy.parse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
@@ -30,15 +30,15 @@ export async function createInvoice(formData: FormData) {
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
   `;
 
-  revalidatePath('/dashboard/invoices');
-  redirect('/dashboard/invoices');
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
 // Use Zod to update the expected types
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const UpdateCaseStudy = FormSchema.omit({ id: true, date: true });
 
-export async function updateInvoice(id: string, formData: FormData) {
-    const { customerId, amount, status } = UpdateInvoice.parse({
+export async function updateCaseStudy(id: string, formData: FormData) {
+    const { customerId, amount, status } = UpdateCaseStudy.parse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
@@ -52,11 +52,11 @@ export async function updateInvoice(id: string, formData: FormData) {
         WHERE id = ${id}
     `;
 
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 }
 
-export async function deleteInvoice(id: string) {
+export async function deleteCaseStudy(id: string) {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
-    revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard');
 }
