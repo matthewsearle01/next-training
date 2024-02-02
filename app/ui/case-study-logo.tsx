@@ -7,9 +7,9 @@ export default function CaseStudyLogo() {
       className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
     >
       <Image
-          src="/hero-desktop.png"
-          width={40}
-          height={40}
+          src="/caseStudy.png"
+          width={60}
+          height={60}
           className="hidden md:block"
           alt="Screenshots of the dashboard project showing desktop version"
         />

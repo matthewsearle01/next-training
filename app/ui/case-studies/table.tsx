@@ -27,7 +27,7 @@ export default async function CaseStudyTable({
                     <div className="mb-2 flex items-center">
                       <p>{caseStudy.name}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{caseStudy.title}</p>
+                    <p className="text-sm text-gray-500">{caseStudy.name}</p>
                   </div>
                   <CaseStudyStatus status={caseStudy.status} />
                 </div>
@@ -50,19 +50,19 @@ export default async function CaseStudyTable({
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
+                  Client
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Title
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
+                  Contributor
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Date
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  View Document
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -81,7 +81,7 @@ export default async function CaseStudyTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {caseStudy.title}
+                    {caseStudy.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(caseStudy.amount)}
