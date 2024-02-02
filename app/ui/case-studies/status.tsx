@@ -20,7 +20,7 @@ export default function CaseStudyStatus({ status }: { status: string }) {
       ) : null}
       {status === 'paid' ? (
         <>
-          Paid
+          Uploded
           <CheckIcon className="ml-1 w-4 text-white" />
         </>
       ) : null}

@@ -81,10 +81,10 @@ export default async function CaseStudyTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {caseStudy.email}
+                    {caseStudy.name}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(caseStudy.amount)}
+                    {caseStudy.name}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(caseStudy.date)}
