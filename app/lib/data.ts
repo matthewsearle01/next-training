@@ -3,7 +3,7 @@ import {
   CustomerField,
   CustomersTableType,
   CaseStudyForm,
-  CaseStudiesTable,
+  CaseStudyTable,
   LatestCaseStudyRaw,
   User,
   Revenue,
@@ -100,7 +100,7 @@ export async function fetchFilteredCaseStudies(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const caseStudies = await sql<InvoicesTable>`
+    const caseStudies = await sql<CaseStudyTable>`
       SELECT
         invoices.id,
         invoices.amount,
@@ -152,7 +152,7 @@ export async function fetchCaseStudyPages(query: string) {
 export async function fetchCaseStudyById(id: string) {
   noStore()
   try {
-    const data = await sql<InvoiceForm>`
+    const data = await sql<CaseStudyForm>`
       SELECT
         invoices.id,
         invoices.customer_id,

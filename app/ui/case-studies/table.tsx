@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { UpdateCaseStudy, DeleteCaseStudy } from '@/app/ui/case-studies/buttons';
 import CaseStudyStatus from '@/app/ui/case-studies/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
@@ -28,7 +27,7 @@ export default async function CaseStudyTable({
                     <div className="mb-2 flex items-center">
                       <p>{caseStudy.name}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{caseStudy.email}</p>
+                    <p className="text-sm text-gray-500">{caseStudy.title}</p>
                   </div>
                   <CaseStudyStatus status={caseStudy.status} />
                 </div>
@@ -54,7 +53,7 @@ export default async function CaseStudyTable({
                   Customer
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Email
+                  Title
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Amount
@@ -82,7 +81,7 @@ export default async function CaseStudyTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {caseStudy.email}
+                    {caseStudy.title}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(caseStudy.amount)}

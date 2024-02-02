@@ -5,14 +5,14 @@
 export type User = {
   id: string;
   name: string;
-  email: string;
+  title: string;
   password: string;
 };
 
 export type Customer = {
   id: string;
   name: string;
-  email: string;
+  title: string;
   image_url: string;
 };
 
@@ -35,7 +35,7 @@ export type LatestCaseStudy = {
   id: string;
   name: string;
   image_url: string;
-  email: string;
+  title: string;
   amount: string;
 };
 
@@ -48,7 +48,7 @@ export type CaseStudyTable = {
   id: string;
   customer_id: string;
   name: string;
-  email: string;
+  title: string;
   image_url: string;
   date: string;
   amount: number;
@@ -58,7 +58,7 @@ export type CaseStudyTable = {
 export type CustomersTableType = {
   id: string;
   name: string;
-  email: string;
+  title: string;
   image_url: string;
   total_case_studies: number;
   total_pending: number;
@@ -68,7 +68,7 @@ export type CustomersTableType = {
 export type FormattedCustomersTable = {
   id: string;
   name: string;
-  email: string;
+  title: string;
   image_url: string;
   total_case_studies: number;
   total_pending: string;
