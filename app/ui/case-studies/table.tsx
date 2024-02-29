@@ -1,8 +1,10 @@
+'use client';
+
 import Image from 'next/image';
 import { UpdateCaseStudy, DeleteCaseStudy } from '@/app/ui/case-studies/buttons';
 import CaseStudyStatus from '@/app/ui/case-studies/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredCaseStudies } from '@/app/lib/data';
+import React, { useState, useEffect } from 'react';
 
 export default async function CaseStudyTable({
   query,
@@ -11,38 +13,41 @@ export default async function CaseStudyTable({
   query: string;
   currentPage: number;
 }) {
-  const caseStudies = await fetchFilteredCaseStudies(query, currentPage);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/list')
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error('Error fetching data: ', error));
+  }, []);
 
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {caseStudies?.map((caseStudy) => (
-              <div
-                key={caseStudy.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
-              >
+            {data.map((data, index) => (
+              <div key={index} className="mb-2 w-full rounded-md bg-white p-4">
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
-                      <p>{caseStudy.name}</p>
+                      <p>{data.Key}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{caseStudy.email}</p>
+                    <p className="text-sm text-gray-500">
+                      Last Modified: {data.LastModified}
+                    </p>
                   </div>
-                  <CaseStudyStatus status={caseStudy.status} />
+                  <p>ETag: {data.ETag}</p>
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-xl font-medium">
-                      {formatCurrency(caseStudy.amount)}
+                      Checksum Algorithm: {data.ChecksumAlgorithm.join(', ')}
                     </p>
-                    <p>{formatDateToLocal(caseStudy.date)}</p>
+                    <p>Size: {data.Size} bytes</p>
                   </div>
-                  <div className="flex justify-end gap-2">
-                    <UpdateCaseStudy id={caseStudy.id} />
-                    <DeleteCaseStudy id={caseStudy.id} />
-                  </div>
+                  <p>Storage Class: {data.StorageClass}</p>
                 </div>
               </div>
             ))}
@@ -51,53 +56,43 @@ export default async function CaseStudyTable({
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Customer
+                  Key
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Email
+                  Last Modified
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Amount
+                  ETag
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Date
+                  Checksum Algorithm
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Status
+                  Size
                 </th>
-                <th scope="col" className="relative py-3 pl-6 pr-3">
-                  <span className="sr-only">Edit</span>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Storage Class
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              {caseStudies?.map((caseStudy) => (
-                <tr
-                  key={caseStudy.id}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
+              {data.map((data, index) => (
+                <tr key={index}>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      <p>{caseStudy.name}</p>
+                      <p>{data.Key}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {caseStudy.email}
+                    {data.LastModified}
                   </td>
+                  <td className="whitespace-nowrap px-3 py-3">{data.ETag}</td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(caseStudy.amount)}
+                    {data.ChecksumAlgorithm.join(', ')}
                   </td>
+                  <td className="whitespace-nowrap px-3 py-3">{data.Size} bytes</td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatDateToLocal(caseStudy.date)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <CaseStudyStatus status={caseStudy.status} />
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
-                      <UpdateCaseStudy id={caseStudy.id} />
-                      <DeleteCaseStudy id={caseStudy.id} />
-                    </div>
+                    {data.StorageClass}
                   </td>
                 </tr>
               ))}
@@ -107,4 +102,6 @@ export default async function CaseStudyTable({
       </div>
     </div>
   );
+  
+  
 }
